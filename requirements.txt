@@ -2,6 +2,8 @@ wheel==0.45.1
 flask
 flask-socketio
 eventlet
+fastapi
+uvicorn[standard]
 python-socketio
 pandas
 yfinance
