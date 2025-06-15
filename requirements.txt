@@ -1,0 +1,10 @@
+wheel==0.45.1
+flask
+flask-socketio
+eventlet
+python-socketio
+pandas
+yfinance
+ta
+numpy
+scikit-learn
