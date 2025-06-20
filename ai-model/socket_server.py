@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 import socketio
 from fastapi import FastAPI
 from signal_generator import main as generate_signals
