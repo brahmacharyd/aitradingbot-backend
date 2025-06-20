@@ -1,20 +1,29 @@
 import socketio
-import asyncio
 from fastapi import FastAPI
-import uvicorn
 from signal_generator import main as generate_signals
 
-sio = socketio.AsyncServer(async_mode='asgi', cors_allowed_origins='*')
+# Create the Socket.IO server with ASGI support
+sio = socketio.AsyncServer(
+    async_mode='asgi',
+    cors_allowed_origins='*'  # Allow all origins (you can restrict to frontend domain)
+)
+
+# FastAPI app for health check
 app = FastAPI()
+
+# Combine FastAPI and Socket.IO into an ASGI application
 app_sio = socketio.ASGIApp(sio, other_asgi_app=app)
+
 @app.get("/")
 async def root():
     return {"message": "🧠 AI Trading Signal Server is running!"}
+
 @sio.event
 async def connect(sid, environ):
     print(f"✅ Client connected: {sid}")
     
-    signals = generate_signals()  # This should now return the list
+    # Call your signal generator
+    signals = generate_signals()
 
     if signals:
         print(f"📤 Emitting {len(signals)} signals")
@@ -26,6 +35,3 @@ async def connect(sid, environ):
 @sio.event
 def disconnect(sid):
     print(f"❌ Client disconnected: {sid}")
-
-if __name__ == "__main__":
-    uvicorn.run(app_sio, host="0.0.0.0", port=3000)
